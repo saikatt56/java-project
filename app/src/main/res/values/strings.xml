@@ -25,6 +25,10 @@
     <string name="export_csv">Export CSV</string>
     <string name="export_done">Exported to %1$s</string>
     <string name="export_failed">Export failed</string>
+    <string name="upload_firebase">Upload to Firebase</string>
+    <string name="upload_started">Uploading data to Firebase…</string>
+    <string name="upload_done">Data uploaded to Firebase successfully!</string>
+    <string name="upload_failed">Upload failed: %1$s</string>
 
     <!-- Rules -->
     <string name="daily_limit_hint">Daily limit (minutes)</string>

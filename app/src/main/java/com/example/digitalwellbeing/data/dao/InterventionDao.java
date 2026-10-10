@@ -24,6 +24,9 @@ public interface InterventionDao {
             + "ORDER BY timestamp ASC")
     List<InterventionEvent> inRange(long from, long to);
 
+    @Query("SELECT * FROM intervention_event ORDER BY timestamp ASC")
+    List<InterventionEvent> all();
+
     @Query("SELECT COUNT(*) FROM intervention_event "
             + "WHERE packageName = :packageName AND outcome = :outcome AND timestamp >= :since")
     int countOutcome(String packageName, int outcome, long since);

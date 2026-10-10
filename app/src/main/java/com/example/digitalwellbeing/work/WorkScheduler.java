@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
@@ -19,6 +20,7 @@ public final class WorkScheduler {
     private static final String WORK_AGGREGATION = "usage_aggregation";
     private static final String WORK_LIMITS = "limit_watch";
     private static final String WORK_SUMMARY = "daily_summary";
+    private static final String WORK_FIREBASE_SYNC = "firebase_sync";
 
     private WorkScheduler() {
     }
@@ -49,6 +51,16 @@ public final class WorkScheduler {
                 ExistingPeriodicWorkPolicy.KEEP,
                 new PeriodicWorkRequest.Builder(DailySummaryWorker.class, 1, TimeUnit.DAYS)
                         .setInitialDelay(millisUntilNextMorning(), TimeUnit.MILLISECONDS)
+                        .build());
+
+        wm.enqueueUniquePeriodicWork(
+                WORK_FIREBASE_SYNC,
+                ExistingPeriodicWorkPolicy.KEEP,
+                new PeriodicWorkRequest.Builder(
+                        FirebaseSyncWorker.class, 1, TimeUnit.HOURS)
+                        .setConstraints(new Constraints.Builder()
+                                .setRequiredNetworkType(NetworkType.CONNECTED)
+                                .build())
                         .build());
     }
 

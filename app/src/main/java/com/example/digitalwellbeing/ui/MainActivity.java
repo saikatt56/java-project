@@ -17,6 +17,7 @@ import com.example.digitalwellbeing.data.AppDatabase;
 import com.example.digitalwellbeing.data.dao.UsageDao;
 import com.example.digitalwellbeing.data.entity.UsageRecord;
 import com.example.digitalwellbeing.export.CsvExporter;
+import com.example.digitalwellbeing.firebase.FirebaseUploader;
 import com.example.digitalwellbeing.util.TimeUtils;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -56,6 +57,9 @@ public class MainActivity extends AppCompatActivity implements UsageAdapter.OnAp
 
         Button export = findViewById(R.id.export_button);
         export.setOnClickListener(v -> exportCsv());
+
+        Button upload = findViewById(R.id.upload_button);
+        upload.setOnClickListener(v -> uploadToFirebase());
 
         configureChart();
     }
@@ -123,6 +127,23 @@ public class MainActivity extends AppCompatActivity implements UsageAdapter.OnAp
             } catch (Exception e) {
                 mainHandler.post(() -> Toast.makeText(this,
                         R.string.export_failed, Toast.LENGTH_LONG).show());
+            }
+        });
+    }
+
+    private void uploadToFirebase() {
+        Toast.makeText(this, R.string.upload_started, Toast.LENGTH_SHORT).show();
+        FirebaseUploader.uploadAllData(this, new FirebaseUploader.UploadCallback() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(MainActivity.this, R.string.upload_done, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(MainActivity.this,
+                        getString(R.string.upload_failed, e.getMessage()),
+                        Toast.LENGTH_LONG).show();
             }
         });
     }

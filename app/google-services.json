@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1067203989310",
+    "firebase_url": "https://java-4687c-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "java-4687c",
+    "storage_bucket": "java-4687c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1067203989310:android:e59cf7d4f8f061c8dbe66f",
+        "android_client_info": {
+          "package_name": "com.example.digitalwellbeing"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4G0CrUb1vrmkGdl1Zp6qODAPthpOat5A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

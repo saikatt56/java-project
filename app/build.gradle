@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -48,6 +49,10 @@ dependencies {
 
     // Charts (proposal 3.2 -- MPAndroidChart)
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    // Firebase Realtime Database
+    implementation(platform("com.google.firebase:firebase-bom:35.0.0"))
+    implementation 'com.google.firebase:firebase-database'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'

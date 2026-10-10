@@ -24,6 +24,9 @@ public interface UsageDao {
     @Query("SELECT * FROM usage_record WHERE dayKey BETWEEN :from AND :to ORDER BY dayKey ASC")
     List<UsageRecord> forRange(int from, int to);
 
+    @Query("SELECT * FROM usage_record ORDER BY dayKey ASC")
+    List<UsageRecord> all();
+
     @Query("SELECT COALESCE(SUM(foregroundMs), 0) FROM usage_record WHERE dayKey = :dayKey")
     long totalForegroundMs(int dayKey);
 
