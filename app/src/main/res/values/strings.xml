@@ -1,0 +1,72 @@
+<resources>
+    <string name="app_name">Wellbeing</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">Before we start</string>
+    <string name="onboarding_body">This app reads how long each application stays in the
+        foreground and how often it is opened. Everything is stored on this device. Nothing is
+        uploaded unless you export it yourself.</string>
+    <string name="participant_id_fmt">Participant ID: %1$s</string>
+    <string name="research_consent">Include my anonymised data in research exports</string>
+    <string name="grant_usage_access">Grant usage access</string>
+    <string name="usage_granted">Usage access granted</string>
+    <string name="enable_accessibility">Enable blocking service</string>
+    <string name="accessibility_enabled">Blocking service enabled</string>
+    <string name="continue_button">Continue</string>
+    <string name="accessibility_service_label">App blocking</string>
+    <string name="accessibility_service_description">Reads the package name of the app in the
+        foreground so that limits and focus modes you configured can be applied. Screen content
+        is not read.</string>
+
+    <!-- Dashboard -->
+    <string name="today_label">Today</string>
+    <string name="last_seven_days">Last 7 days</string>
+    <string name="hours_per_day">Hours per day</string>
+    <string name="export_csv">Export CSV</string>
+    <string name="export_done">Exported to %1$s</string>
+    <string name="export_failed">Export failed</string>
+
+    <!-- Rules -->
+    <string name="daily_limit_hint">Daily limit (minutes)</string>
+    <string name="session_limit_hint">Session limit (minutes)</string>
+    <string name="blocklist_label">Block this app completely</string>
+    <string name="bypass_label">Allow emergency bypass</string>
+    <string name="intervention_label">Intervention</string>
+    <string name="save_rule">Save rule</string>
+    <string name="rule_saved">Rule saved</string>
+
+    <!-- Block screen -->
+    <string name="block_generic">This app is currently restricted.</string>
+    <string name="block_daily_limit">You have reached your daily limit for this app.</string>
+    <string name="block_session_limit">This session has run past your session limit.</string>
+    <string name="block_outside_window">This app is outside its allowed hours.</string>
+    <string name="block_focus_mode">A focus mode is running.</string>
+    <string name="block_blocklist">This app is on your blocklist.</string>
+    <string name="bypass_hint">Type: I need this now</string>
+    <string name="bypass_button">Bypass anyway</string>
+    <string name="bypass_phrase_wrong">The phrase does not match.</string>
+    <string name="close_button">Go back</string>
+
+    <!-- Breathing screen -->
+    <string name="breathing_title">Take a breath</string>
+    <string name="breathing_done">Ready</string>
+    <string name="continue_anyway">Open anyway</string>
+    <string name="leave_button">Not now</string>
+
+    <!-- Notifications -->
+    <string name="channel_limits">Limit alerts</string>
+    <string name="channel_limits_desc">Warnings as you approach a daily limit</string>
+    <string name="channel_summary">Summaries</string>
+    <string name="notif_limit_reached">%1$s: daily limit reached</string>
+    <string name="notif_limit_near">%1$s: %2$d%% of your daily limit</string>
+
+    <!-- Widget -->
+    <string name="widget_today">Today</string>
+
+    <!-- App Usage on Intervention -->
+    <string name="app_usage_today_fmt">Today: %1$s \u00b7 %2$s</string>
+    <plurals name="launch_count_fmt">
+        <item quantity="one">%1$d open</item>
+        <item quantity="other">%1$d opens</item>
+    </plurals>
+</resources>

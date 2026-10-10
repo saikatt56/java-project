@@ -1,0 +1,15 @@
+<resources>
+    <style name="Theme.DigitalWellbeing" parent="Theme.Material3.DayNight">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorSecondary">@color/accent</item>
+    </style>
+
+    <!-- Intervention screens sit on top of another app, so they are opaque
+         and have no action bar to look like part of that app. -->
+    <style name="Theme.DigitalWellbeing.Intervention" parent="Theme.DigitalWellbeing">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/block_background</item>
+    </style>
+</resources>
