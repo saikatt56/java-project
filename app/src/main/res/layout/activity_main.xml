@@ -48,7 +48,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="2dp"
+            android:textSize="11sp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
             android:text="@string/export_csv" />
 
         <Button
@@ -56,7 +59,34 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            android:textSize="11sp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
             android:text="@string/upload_firebase" />
+
+        <Button
+            android:id="@+id/history_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            android:textSize="11sp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:text="@string/history_button" />
+
+        <Button
+            android:id="@+id/settings_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="2dp"
+            android:textSize="11sp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:text="@string/settings_button" />
     </LinearLayout>
 </LinearLayout>

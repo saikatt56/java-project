@@ -42,6 +42,10 @@ public interface UsageDao {
             + "WHERE dayKey BETWEEN :from AND :to GROUP BY dayKey ORDER BY dayKey ASC")
     List<DayTotal> dailyTotals(int from, int to);
 
+    @Query("SELECT packageName AS packageName, COALESCE(appLabel, packageName) AS appLabel, SUM(foregroundMs) AS totalMs "
+            + "FROM usage_record WHERE dayKey BETWEEN :from AND :to GROUP BY packageName HAVING totalMs > 0 ORDER BY totalMs DESC")
+    List<AppTotal> appTotalsForRange(int from, int to);
+
     @Query("DELETE FROM usage_record WHERE dayKey < :dayKey")
     int deleteBefore(int dayKey);
 
@@ -54,6 +58,13 @@ public interface UsageDao {
     /** Projection for the weekly trend chart. */
     class DayTotal {
         public int dayKey;
+        public long totalMs;
+    }
+
+    /** Projection for per-app totals over a range. */
+    class AppTotal {
+        public String packageName;
+        public String appLabel;
         public long totalMs;
     }
 }

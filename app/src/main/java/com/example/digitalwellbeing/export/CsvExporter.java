@@ -1,6 +1,9 @@
 package com.example.digitalwellbeing.export;
 
 import android.content.Context;
+import android.net.Uri;
+
+import androidx.documentfile.provider.DocumentFile;
 
 import com.example.digitalwellbeing.data.AppDatabase;
 import com.example.digitalwellbeing.data.entity.InterventionEvent;
@@ -35,6 +38,31 @@ public class CsvExporter {
     }
 
     /**
+     * Writes both files into the user-selected directory URI and returns the directory name.
+     */
+    public String exportToDirectory(Uri treeUri, int fromDayKey, int toDayKey) throws IOException {
+        DocumentFile pickedDir = DocumentFile.fromTreeUri(context, treeUri);
+        if (pickedDir == null || !pickedDir.isDirectory()) {
+            throw new IOException("Invalid directory");
+        }
+
+        String uuid = ParticipantId.get(context);
+        String stamp = String.valueOf(TimeUtils.today());
+
+        DocumentFile usageFile = pickedDir.createFile("text/csv", "usage_" + stamp + ".csv");
+        DocumentFile eventFile = pickedDir.createFile("text/csv", "interventions_" + stamp + ".csv");
+
+        if (usageFile == null || eventFile == null) {
+            throw new IOException("Could not create export files in target directory");
+        }
+
+        writeUsage(usageFile.getUri(), uuid, fromDayKey, toDayKey);
+        writeInterventions(eventFile.getUri(), uuid, fromDayKey, toDayKey);
+
+        return pickedDir.getName();
+    }
+
+    /**
      * Writes both files into the app's external files dir and returns them.
      */
     public File[] exportAll(int fromDayKey, int toDayKey) throws IOException {
@@ -63,7 +91,23 @@ public class CsvExporter {
                         uuid,
                         r.dayKey,
                         escape(r.packageName),
-                        escape(AppCategory.label(r.category)),
+                        escape(AppCategory.label(context, r.category)),
+                        r.foregroundMinutes(),
+                        r.launchCount));
+            }
+        }
+    }
+
+    private void writeUsage(Uri uri, String uuid, int from, int to) throws IOException {
+        List<UsageRecord> records = AppDatabase.get(context).usageDao().forRange(from, to);
+        try (Writer writer = newWriter(uri)) {
+            writer.write("participant_uuid,day,package_name,category,foreground_minutes,launch_count\n");
+            for (UsageRecord r : records) {
+                writer.write(String.format(Locale.US, "%s,%d,%s,%s,%d,%d%n",
+                        uuid,
+                        r.dayKey,
+                        escape(r.packageName),
+                        escape(AppCategory.label(context, r.category)),
                         r.foregroundMinutes(),
                         r.launchCount));
             }
@@ -94,8 +138,36 @@ public class CsvExporter {
         }
     }
 
+    private void writeInterventions(Uri uri, String uuid, int from, int to) throws IOException {
+        long fromMillis = dayKeyToMillis(from);
+        long toMillis = dayKeyToMillis(to) + 86_400_000L;
+        List<InterventionEvent> events =
+                AppDatabase.get(context).interventionDao().inRange(fromMillis, toMillis);
+
+        try (Writer writer = newWriter(uri)) {
+            writer.write("participant_uuid,timestamp_ms,day,package_name,"
+                    + "intervention_type,reason,outcome,dwell_ms,focus_mode\n");
+            for (InterventionEvent e : events) {
+                writer.write(String.format(Locale.US, "%s,%d,%d,%s,%s,%s,%s,%d,%s%n",
+                        uuid,
+                        e.timestamp,
+                        TimeUtils.dayKey(e.timestamp),
+                        escape(e.packageName),
+                        escape(InterventionType.label(e.interventionType)),
+                        escape(e.reason),
+                        outcomeLabel(e.outcome),
+                        e.dwellMs,
+                        escape(e.focusModeName)));
+            }
+        }
+    }
+
     private Writer newWriter(File file) throws IOException {
         return new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+    }
+
+    private Writer newWriter(Uri uri) throws IOException {
+        return new OutputStreamWriter(context.getContentResolver().openOutputStream(uri), StandardCharsets.UTF_8);
     }
 
     private static long dayKeyToMillis(int dayKey) {

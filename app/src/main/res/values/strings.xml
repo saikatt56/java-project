@@ -13,7 +13,7 @@
     <string name="enable_accessibility">Enable blocking service</string>
     <string name="accessibility_enabled">Blocking service enabled</string>
     <string name="continue_button">Continue</string>
-    <string name="accessibility_service_label">App blocking</string>
+    <string name="accessibility_service_label">Wellbeing</string>
     <string name="accessibility_service_description">Reads the package name of the app in the
         foreground so that limits and focus modes you configured can be applied. Screen content
         is not read.</string>
@@ -25,10 +25,37 @@
     <string name="export_csv">Export CSV</string>
     <string name="export_done">Exported to %1$s</string>
     <string name="export_failed">Export failed</string>
-    <string name="upload_firebase">Upload to Firebase</string>
+    <string name="upload_firebase">Upload</string>
     <string name="upload_started">Uploading data to Firebase…</string>
     <string name="upload_done">Data uploaded to Firebase successfully!</string>
     <string name="upload_failed">Upload failed: %1$s</string>
+    <string name="history_button">History</string>
+    <string name="history_title">Usage History</string>
+    <string name="last_7_days_category_history">Last 7 Days (Hours per Category)</string>
+    <string name="last_30_days_category_history">Last 30 Days (Hours per Category)</string>
+    <string name="last_7_days_history">Last 7 Days (Hours per App)</string>
+    <string name="last_30_days_history">Last 30 Days (Hours per App)</string>
+    <string name="hours_label">Hours</string>
+    <string name="no_history_data">No usage data found for this period.</string>
+    <string name="settings_button">Settings</string>
+    <string name="settings_title">Settings</string>
+    <string name="permissions_section">Permissions &amp; Access</string>
+    <string name="participant_section">Research &amp; Privacy</string>
+    <string name="granted">Granted</string>
+    <string name="not_granted">Not Granted</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="regenerate_id">Regenerate Participant ID</string>
+    <string name="id_regenerated">Participant ID regenerated</string>
+    <string name="manage_categories">Manage Categories</string>
+    <string name="create_category">Create Category</string>
+    <string name="category_name_hint">Category name</string>
+    <string name="delete_category">Delete</string>
+    <string name="add_app">Add App</string>
+    <string name="remove">Remove</string>
+    <string name="category_created">Category created</string>
+    <string name="category_deleted">Category deleted</string>
+    <string name="app_added">App added to category</string>
+    <string name="app_removed">App removed from category</string>
 
     <!-- Rules -->
     <string name="daily_limit_hint">Daily limit (minutes)</string>
@@ -73,4 +100,18 @@
         <item quantity="one">%1$d open</item>
         <item quantity="other">%1$d opens</item>
     </plurals>
+
+    <!-- Password Screen -->
+    <string name="password_title">Enter App Password</string>
+    <string name="password_hint">Password</string>
+    <string name="unlock_button">Unlock</string>
+    <string name="wrong_password">Incorrect password.</string>
+    <string name="set_password">Set App Password</string>
+    <string name="change_password">Change App Password</string>
+    <string name="current_password_hint">Current Password</string>
+    <string name="new_password_hint">New Password</string>
+    <string name="password_changed">Password updated successfully</string>
+    <string name="password_incorrect">Current password is incorrect</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
 </resources>

@@ -30,6 +30,20 @@
 
         <activity android:name=".ui.MainActivity" android:exported="false" />
         <activity android:name=".ui.AppRuleActivity" android:exported="false" />
+        <activity
+            android:name=".ui.HistoryActivity"
+            android:exported="false"
+            android:label="@string/history_title"
+            android:parentActivityName=".ui.MainActivity" />
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:exported="false"
+            android:label="@string/settings_title"
+            android:parentActivityName=".ui.MainActivity" />
+        <activity
+            android:name=".ui.PasswordActivity"
+            android:exported="false"
+            android:theme="@style/Theme.DigitalWellbeing" />
 
         <!-- Intervention screens are launched over the blocked app. -->
         <activity

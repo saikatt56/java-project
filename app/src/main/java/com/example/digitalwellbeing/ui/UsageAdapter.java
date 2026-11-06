@@ -51,7 +51,7 @@ public class UsageAdapter extends RecyclerView.Adapter<UsageAdapter.ViewHolder> 
         holder.name.setText(record.appLabel != null ? record.appLabel : record.packageName);
         holder.duration.setText(TimeUtils.formatDuration(record.foregroundMs));
         holder.detail.setText(String.format(Locale.US, "%s \u00b7 %d opens",
-                AppCategory.label(record.category), record.launchCount));
+                AppCategory.label(holder.itemView.getContext(), record.category), record.launchCount));
         holder.itemView.setOnClickListener(v -> listener.onAppSelected(record));
     }
 

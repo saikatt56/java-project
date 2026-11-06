@@ -1,6 +1,7 @@
 package com.example.digitalwellbeing.ui;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -8,6 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,7 +29,6 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +43,29 @@ public class MainActivity extends AppCompatActivity implements UsageAdapter.OnAp
     private TextView totalToday;
     private BarChart weeklyChart;
     private UsageAdapter adapter;
+
+    private final ActivityResultLauncher<Intent> exportLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    Uri uri = result.getData().getData();
+                    if (uri != null) {
+                        int takeFlags = result.getData().getFlags()
+                                & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                        if (takeFlags == 0) {
+                            takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+                        }
+                        try {
+                            getContentResolver().takePersistableUriPermission(uri, takeFlags);
+                        } catch (SecurityException e) {
+                            // Ignored
+                        }
+                        exportCsvToUri(uri);
+                    }
+                }
+            }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,18 +86,44 @@ public class MainActivity extends AppCompatActivity implements UsageAdapter.OnAp
         Button upload = findViewById(R.id.upload_button);
         upload.setOnClickListener(v -> uploadToFirebase());
 
+        Button history = findViewById(R.id.history_button);
+        history.setOnClickListener(v -> startActivity(new Intent(this, HistoryActivity.class)));
+
+        Button settings = findViewById(R.id.settings_button);
+        settings.setOnClickListener(v -> startActivity(new Intent(this, SettingsActivity.class)));
+
         configureChart();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        if (com.example.digitalwellbeing.util.PasswordManager.hasPassword(this)
+                && !com.example.digitalwellbeing.util.PasswordManager.isUnlocked()) {
+            startActivity(new Intent(this, PasswordActivity.class));
+            return;
+        }
         loadDashboard();
     }
 
     /** All Room access happens on the shared IO executor, never on the UI thread. */
     private void loadDashboard() {
         AppDatabase.IO.execute(() -> {
+            if (com.example.digitalwellbeing.util.PermissionUtils.hasUsageAccess(this)) {
+                try {
+                    com.example.digitalwellbeing.usage.UsageStatsCollector collector = new com.example.digitalwellbeing.usage.UsageStatsCollector(this);
+                    long now = System.currentTimeMillis();
+                    List<UsageRecord> todayRecords = collector.collectForDay(now);
+                    List<UsageRecord> yesterdayRecords = collector.collectForDay(now - 86_400_000L);
+
+                    AppDatabase db = AppDatabase.get(this);
+                    db.usageDao().upsertAll(todayRecords);
+                    db.usageDao().upsertAll(yesterdayRecords);
+                } catch (Exception e) {
+                    // Ignore collection errors
+                }
+            }
+
             UsageDao dao = AppDatabase.get(this).usageDao();
             int today = TimeUtils.today();
             long total = dao.totalForegroundMs(today);
@@ -116,13 +167,18 @@ public class MainActivity extends AppCompatActivity implements UsageAdapter.OnAp
     }
 
     private void exportCsv() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        exportLauncher.launch(intent);
+    }
+
+    private void exportCsvToUri(Uri uri) {
         AppDatabase.IO.execute(() -> {
             try {
                 int today = TimeUtils.today();
-                File[] files = new CsvExporter(this)
-                        .exportAll(TimeUtils.dayKeyOffset(today, -29), today);
+                String dirName = new CsvExporter(this)
+                        .exportToDirectory(uri, TimeUtils.dayKeyOffset(today, -29), today);
                 mainHandler.post(() -> Toast.makeText(this,
-                        getString(R.string.export_done, files[0].getParent()),
+                        getString(R.string.export_done, dirName != null ? dirName : "selected location"),
                         Toast.LENGTH_LONG).show());
             } catch (Exception e) {
                 mainHandler.post(() -> Toast.makeText(this,

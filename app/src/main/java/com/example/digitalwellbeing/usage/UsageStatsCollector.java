@@ -55,7 +55,7 @@ public class UsageStatsCollector {
             record.dayKey = dayKey;
             record.packageName = pkg;
             record.appLabel = labelOf(pkg);
-            record.category = AppCategory.guess(pkg);
+            record.category = AppCategory.guess(context, pkg);
             record.foregroundMs = ms;
             Integer count = launches.get(pkg);
             record.launchCount = count == null ? 0 : count;
